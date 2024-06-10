@@ -50,7 +50,7 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 	private org.thymeleaf.TemplateEngine jsEngine;
 	private final ServerProperties serverProperties;
 	private final DBFileSystem fileSystem;
-	private final Theme theme;
+	private Theme theme;
 
 	public ThymeleafTemplateEngine(final DBFileSystem fileSystem, 
 			final ServerProperties serverProperties,
@@ -123,6 +123,14 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 	@Override
 	public void invalidateCache() {
 		htmlEngine.getCacheManager().clearAllCaches();
+	}
+
+	@Override
+	public void updateTheme(Theme theme) {
+		this.theme = theme;
+		
+		initHtmlTemplateing();
+		initJSTemplateing();
 	}
 
 }
