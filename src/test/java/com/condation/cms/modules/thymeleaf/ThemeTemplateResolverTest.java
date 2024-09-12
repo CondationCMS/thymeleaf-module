@@ -1,4 +1,4 @@
-package com.github.thmarx.cms.modules.thymeleaf;
+package com.condation.cms.modules.thymeleaf;
 
 /*-
  * #%L
@@ -22,6 +22,7 @@ package com.github.thmarx.cms.modules.thymeleaf;
  * #L%
  */
 
+import com.condation.cms.modules.thymeleaf.ThemeTemplateResolver;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

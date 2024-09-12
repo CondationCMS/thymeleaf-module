@@ -1,4 +1,4 @@
-package com.github.thmarx.cms.modules.thymeleaf;
+package com.condation.cms.modules.thymeleaf;
 
 /*-
  * #%L
@@ -22,9 +22,9 @@ package com.github.thmarx.cms.modules.thymeleaf;
  * #L%
  */
 
-import com.github.thmarx.cms.api.extensions.TemplateEngineProviderExtentionPoint;
-import com.github.thmarx.cms.api.template.TemplateEngine;
-import com.github.thmarx.modules.api.annotation.Extension;
+import com.condation.cms.api.extensions.TemplateEngineProviderExtentionPoint;
+import com.condation.cms.api.template.TemplateEngine;
+import com.condation.modules.api.annotation.Extension;
 
 /**
  *
