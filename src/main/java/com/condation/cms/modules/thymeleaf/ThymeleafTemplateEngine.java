@@ -1,4 +1,4 @@
-package com.github.thmarx.cms.modules.thymeleaf;
+package com.condation.cms.modules.thymeleaf;
 
 /*-
  * #%L
@@ -22,10 +22,10 @@ package com.github.thmarx.cms.modules.thymeleaf;
  * #L%
  */
 
-import com.github.thmarx.cms.api.ServerProperties;
-import com.github.thmarx.cms.api.db.DBFileSystem;
-import com.github.thmarx.cms.api.template.TemplateEngine;
-import com.github.thmarx.cms.api.theme.Theme;
+import com.condation.cms.api.ServerProperties;
+import com.condation.cms.api.db.DBFileSystem;
+import com.condation.cms.api.template.TemplateEngine;
+import com.condation.cms.api.theme.Theme;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;

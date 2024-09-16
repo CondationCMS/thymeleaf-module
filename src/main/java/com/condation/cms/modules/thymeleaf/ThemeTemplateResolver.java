@@ -1,4 +1,4 @@
-package com.github.thmarx.cms.modules.thymeleaf;
+package com.condation.cms.modules.thymeleaf;
 
 /*-
  * #%L
