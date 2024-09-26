@@ -38,6 +38,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 /**
  *
@@ -48,6 +49,7 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 
 	private org.thymeleaf.TemplateEngine htmlEngine;
 	private org.thymeleaf.TemplateEngine jsEngine;
+	private org.thymeleaf.TemplateEngine stringEngine;
 	private final ServerProperties serverProperties;
 	private final DBFileSystem fileSystem;
 	private Theme theme;
@@ -63,6 +65,7 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 		
 		initHtmlTemplateing();
 		initJSTemplateing();
+		initStringTemplateing();
 	}
 	
 	private void initHtmlTemplateing () {
@@ -75,6 +78,11 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 
 		htmlEngine = new org.thymeleaf.TemplateEngine();
 		htmlEngine.setTemplateResolver(new ThemeTemplateResolver(siteTemplateResolver, Optional.ofNullable(themeTemplateResolver)));
+	}
+	
+	private void initStringTemplateing () {
+		stringEngine = new org.thymeleaf.TemplateEngine();
+		stringEngine.setTemplateResolver(new StringTemplateResolver());
 	}
 	
 	private void initJSTemplateing () {
@@ -110,15 +118,22 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 		Writer writer = new StringWriter();
 		final Context context = new Context(Locale.getDefault(), model.values);
 		
-		if ("application/json".equals(model.contentNode.contentType())) {
+		if (model.contentNode != null && "application/json".equals(model.contentNode.contentType())) {
 			jsEngine.process(template, context, writer);
 		} else {
 			htmlEngine.process(template, context, writer);
-		}
-				
+		}		
 		
 		return writer.toString();
 	}
+
+	@Override
+	public String renderFromString(String templateString, Model model) throws IOException {
+		final Context context = new Context(Locale.getDefault(), model.values);
+		return stringEngine.process(templateString, context);
+	}
+	
+	
 
 	@Override
 	public void invalidateCache() {
