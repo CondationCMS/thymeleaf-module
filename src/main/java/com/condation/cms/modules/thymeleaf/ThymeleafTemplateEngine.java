@@ -68,16 +68,30 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 		initStringTemplateing();
 	}
 	
-	private void initHtmlTemplateing () {
+	private void initTemplateResolver (TemplateMode mode, org.thymeleaf.TemplateEngine templateEngine) {
 		var templateBase = fileSystem.resolve("templates/");
-		ITemplateResolver siteTemplateResolver = templateResolver(templateBase, TemplateMode.HTML);
+		ITemplateResolver siteTemplateResolver = templateResolver(templateBase, mode);
 		ITemplateResolver themeTemplateResolver = null;
+		ITemplateResolver parentThemeTemplateResolver = null;
 		if (!theme.empty()) {
-			themeTemplateResolver = templateResolver(theme.templatesPath(), TemplateMode.HTML);
+			themeTemplateResolver = templateResolver(theme.templatesPath(), mode);
+		}
+		if (!theme.empty() && theme.getParentTheme() != null) {
+			parentThemeTemplateResolver = templateResolver(theme.getParentTheme().templatesPath(), mode);
 		}
 
+		templateEngine.setTemplateResolver(
+				new ThemeTemplateResolver(
+						siteTemplateResolver, 
+						Optional.ofNullable(themeTemplateResolver),
+						Optional.ofNullable(parentThemeTemplateResolver)
+				)
+		);
+	}
+	
+	private void initHtmlTemplateing () {
 		htmlEngine = new org.thymeleaf.TemplateEngine();
-		htmlEngine.setTemplateResolver(new ThemeTemplateResolver(siteTemplateResolver, Optional.ofNullable(themeTemplateResolver)));
+		initTemplateResolver(TemplateMode.HTML, htmlEngine);
 	}
 	
 	private void initStringTemplateing () {
@@ -86,15 +100,8 @@ public class ThymeleafTemplateEngine implements TemplateEngine {
 	}
 	
 	private void initJSTemplateing () {
-		var templateBase = fileSystem.resolve("templates/");
-		ITemplateResolver siteTemplateResolver = templateResolver(templateBase, TemplateMode.JAVASCRIPT);
-		ITemplateResolver themeTemplateResolver = null;
-		if (!theme.empty()) {
-			themeTemplateResolver = templateResolver(theme.templatesPath(), TemplateMode.JAVASCRIPT);
-		}
-
 		jsEngine = new org.thymeleaf.TemplateEngine();
-		jsEngine.setTemplateResolver(new ThemeTemplateResolver(siteTemplateResolver, Optional.ofNullable(themeTemplateResolver)));
+		initTemplateResolver(TemplateMode.JAVASCRIPT, jsEngine);
 	}
 	
 	private ITemplateResolver templateResolver (final Path templatePath, final TemplateMode mode) {

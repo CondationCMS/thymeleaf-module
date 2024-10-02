@@ -39,13 +39,14 @@ public class ThemeTemplateResolver implements ITemplateResolver {
 
 	private final ITemplateResolver siteTemplateResolver;
 	private final Optional<ITemplateResolver> themeTemplateResolver;
+	private final Optional<ITemplateResolver> parentThemeTemplateResolver;
 	
 	@Setter
 	private int order = 0;
 	
 	@Override
 	public String getName() {
-		return "ThemeTemlateResolver";
+		return "ThemeTemplateResolver";
 	}
 
 	@Override
@@ -58,8 +59,12 @@ public class ThemeTemplateResolver implements ITemplateResolver {
 		TemplateResolution resolveTemplate = siteTemplateResolver.resolveTemplate(configuration, ownerTemplate, template, templateResolutionAttributes);
 		
 		if ((resolveTemplate == null || !resolveTemplate.getTemplateResource().exists()) && themeTemplateResolver.isPresent()) {
-			return themeTemplateResolver.get().resolveTemplate(configuration, ownerTemplate, template, templateResolutionAttributes);
+			resolveTemplate = themeTemplateResolver.get().resolveTemplate(configuration, ownerTemplate, template, templateResolutionAttributes);
 		}
+		if ((resolveTemplate == null || !resolveTemplate.getTemplateResource().exists()) && parentThemeTemplateResolver.isPresent()) {
+			resolveTemplate = parentThemeTemplateResolver.get().resolveTemplate(configuration, ownerTemplate, template, templateResolutionAttributes);
+		}
+		
 		return resolveTemplate;
 	}
 	
